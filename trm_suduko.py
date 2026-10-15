@@ -9,6 +9,9 @@ Original file is located at
 
 import random, numpy as np, torch, torch.nn as nn, torch.nn.functional as F, json, os, time
 from google.colab import drive
+drive.mount('/content/drive')
+os.makedirs('/content/drive/MyDrive/trm/results', exist_ok=True)
+!ls /content/drive/MyDrive/trm/results
 dev = 'cuda'
 
 def ok(g, r, c, v, n, b):
@@ -326,6 +329,25 @@ for name, kw in grid:
     for seed in (0, 1, 2):
         run_config(name, seed=seed, **kw)
 for seed in (1, 2): run_config('base', seed=seed)
+
+import glob, pandas as pd
+rows = [json.load(open(f)) for f in glob.glob(f'{RES}/*.json')]
+df = pd.DataFrame(rows)
+tab = df.groupby('name').agg(acc=('test_acc','mean'), std=('test_acc','std'),
+                             seeds=('seed','count'), mins=('minutes','mean')).round(3)
+print(tab.sort_values('acc', ascending=False))
+
+tab['acc'].plot(kind='bar', yerr=tab['std'], figsize=(9,4), capsize=3)
+plt.ylabel('Test puzzle accuracy'); plt.title('TRM ablations (4x4 Sudoku)')
+plt.tight_layout(); plt.show()
+
+ctrl = [('nsup1_eq', dict(N_sup=1,  epochs=1600)),
+        ('nsup2_eq', dict(N_sup=2,  epochs=800)),
+        ('nsup4_eq', dict(N_sup=4,  epochs=400)),
+        ('nsup8_eq', dict(N_sup=8,  epochs=200))]
+for name, kw in ctrl:
+    for seed in (0, 1, 2):
+        run_config(name, seed=seed, **kw)
 
 import glob, pandas as pd
 rows = [json.load(open(f)) for f in glob.glob(f'{RES}/*.json')]

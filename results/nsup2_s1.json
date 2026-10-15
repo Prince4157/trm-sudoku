@@ -1,0 +1,1 @@
+{"name": "nsup2", "n": 6, "T": 3, "N_sup": 2, "seed": 1, "onestep": false, "use_ema": true, "epochs": 100, "test_acc": 0.0, "curve": [0.0, 0.0], "minutes": 0.1988393505414327}

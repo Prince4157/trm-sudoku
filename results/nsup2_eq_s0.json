@@ -1,0 +1,1 @@
+{"name": "nsup2_eq", "n": 6, "T": 3, "N_sup": 2, "seed": 0, "onestep": false, "use_ema": true, "epochs": 800, "test_acc": 0.8916667103767395, "curve": [0.8750000596046448, 0.8916667103767395], "minutes": 1.5596504926681518}
